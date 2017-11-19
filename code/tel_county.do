@@ -11,7 +11,7 @@ clear all
 
 * GLOBALS
 * The $home directory will need to be changed
-global home "~/Dropbox/Data/tels/tels-data/"
+global home "~/Dropbox/Data/tels/"
 global raw "${home}rawdata/"
 global exports "${home}exports/"
 
