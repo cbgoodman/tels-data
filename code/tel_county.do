@@ -65,3 +65,27 @@ save ${exports}tels_county_changes.dta, replace
 
 * Export to Excel File
 export excel using ${exports}tels_county_changes.xlsx, replace firstrow(varlabels)
+
+* Expanding the year variable
+tsset statefips year
+tsfill
+
+* Filling in the missing parts of the data
+foreach x of varlist opt_lim-fd {
+  bysort statefips (year): replace `x' = `x'[_n-1] if `x' == .
+}
+replace typecode=1
+replace typename="County"
+
+* Keeping overlapping data only (1962 to 2012)
+keep if year >= `begindate' & year <= `finaldate'
+
+merge m:1 statefips using `crosswalk', nogen update
+
+* Exporting to Stata .dta file
+sort stateabb year
+save ${exports}tels_county_state.dta, replace
+
+* Exporting to excel spreadsheet format
+export excel using ${exports}tels_county_state.xlsx, replace firstrow(varlabels)
+
